@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Tipe Kamar</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data Tipe Kamar</h1>
+    <table id="kamarTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipe Kamar</th>
+                <th>Deskripsi</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        // Fungsi untuk memanggil data dari server
+        function fetchData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "getTabelKost.php", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    populateTable(data);
+                }
+            };
+            xhr.send();
+        }
+
+        // Fungsi untuk memproses data dan menampilkannya dalam tabel
+        function populateTable(data) {
+            var tableBody = document.getElementById('kamarTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ""; // Bersihkan isi tabel sebelumnya
+
+            data.forEach(function(item) {
+                var row = tableBody.insertRow();
+
+                var cellId = row.insertCell(0);
+                var cellTipe = row.insertCell(1);
+                var cellDeskripsi = row.insertCell(2);
+
+                cellId.textContent = item.id;
+                cellTipe.textContent = item.tipe;
+                cellDeskripsi.textContent = item.deskripsi;
+            });
+        }
+
+        // Panggil fungsi fetchData saat halaman dimuat
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
